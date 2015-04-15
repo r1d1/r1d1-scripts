@@ -1,0 +1,79 @@
+
+#find /opt/ros/ -type d -maxdepth 1
+
+unset ROS_DISTRO
+unset ROS_PACKAGE_PATH
+unset ROS_ETC_DIR
+unset ROS_ROOT
+
+distrolist=()
+
+if [ -d /opt/ros ]; then
+    echo "Found ros install at default path (in /opt)."
+    for f in /opt/ros/*; do
+    #	echo "Installed distro :"
+	distro="$( cut -d '/' -f 4 <<< "$f")"
+    #	echo $distro
+	distrolist+=($distro)
+    done
+else
+	echo "Not found distro !"
+fi
+
+echo "available distributions :"
+echo ${distrolist[@]}
+echo '-----------------'
+#echo ${#distrolist[@]}
+
+
+# Setup aliases :
+alias usepr2="export ROS_MASTER_URI=http://$ROBOTADDRESS:11311 ; export ROBOT=pr2 ;"
+#PS1=\"$PS1\e[0;31m-PR2\e[m\$ \""
+alias usesim="export ROS_MASTER_URI=http://localhost:11311 ; export ROBOT=sim ;"
+#PS1=\"$PS1\e[0;31m-SIM\e[m\$ \""
+
+useddistro=""
+
+export ROS_IP=134.157.18.211
+
+# setup functions :
+function usedistro
+{
+	unset ROS_DISTRO
+	unset ROS_PACKAGE_PATH
+	unset ROS_ETC_DIR
+	unset ROS_ROOT
+
+	local e
+	thegoodone=true
+	for e in "${distrolist[@]}"; do
+#		echo ${distrolist[@]}
+		echo "Testing" $e
+		if [ "$e" == "$1" ];
+		then
+			useddistro=$1
+			thegoodone=true
+			break;
+		else
+			echo "Not" $e
+			thegoodone=false;
+		fi
+	done
+	echo $thegoodone, $useddistro
+	if ! $thegoodone ;
+		then
+		echo "Unknown distribution, quitting !"
+		return 0;
+	else
+		#Setup environnment
+		source /opt/ros/$useddistro/setup.bash
+		export ROS_WORKSPACE=/home/renaudo/catkin_ws
+		export ROS_PACKAGE_PATH=/home/renaudo/catkin_ws:$ROS_PACKAGE_PATH
+#		source $ROS_WORKSPACE/devel/setup.bash ;
+		# To access my packages executables :
+		echo "Sourcing $ROS_WORKSPACE/devel/setup.bash"
+		source $ROS_WORKSPACE/devel/setup.bash
+	fi
+
+}
+
