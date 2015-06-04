@@ -31,6 +31,7 @@ alias usepr2="export ROS_MASTER_URI=http://$ROBOTADDRESS:11311 ; export ROBOT=pr
 #PS1=\"$PS1\e[0;31m-PR2\e[m\$ \""
 alias usesim="export ROS_MASTER_URI=http://localhost:11311 ; export ROBOT=sim ;"
 #PS1=\"$PS1\e[0;31m-SIM\e[m\$ \""
+alias roscomp='sup sup catkin_make ; roscd '
 
 useddistro=""
 
