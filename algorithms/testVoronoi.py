@@ -9,7 +9,7 @@ from Voronoi import Voronoi
 
 sizeEnv = (100,100)
 
-np.set_printoptions(linewidth=100)
+np.set_printoptions(linewidth=200)
 
 # Build map of environment, 0 is free space, 1 is obstacle :
 mapEnv = np.zeros(sizeEnv)
