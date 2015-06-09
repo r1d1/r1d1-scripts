@@ -38,11 +38,12 @@ for x in np.arange(sizeEnv[0]):
 #			if (y > 30) and (y < 70):
 #				mapEnv[y,x] = 1
 
-for x in np.arange(sizeEnv[0]):
-	if (x > 20) and (x < 40):
-		for y in np.arange(sizeEnv[1]):
-			if (y > 20) and (y < 45):
-				mapEnv[y,x] = 1
+#for x in np.arange(sizeEnv[0]):
+#	if (x > 20) and (x < 40):
+#		for y in np.arange(sizeEnv[1]):
+#			if (y > 20) and (y < 45):
+#				mapEnv[y,x] = 1
+
 mapEnv = mapEnv.T
 #--------------------------------------------------------
 # Construct Voronoi tesselator :
@@ -51,7 +52,10 @@ print tesseling.centerList
 
 # Add center by hand for TDD :
 #tesseling.addCenter(5, 5)
-tesseling.addCenter(80.0, 35)
+#tesseling.addCenter(10.0, 90.0)
+#tesseling.addCenter(90.0, 10.0)
+#tesseling.addCenter(10.0, 10.0)
+#tesseling.addCenter(90.0, 90.0)
 print "Center list:",tesseling.centerList
 tesseling.senseLasers(mapEnv)
 #print "##### Sense:", tesseling.leftDist, tesseling.rightDist, tesseling.topDist, tesseling.downDist, tesseling.sensors
@@ -59,18 +63,18 @@ print "##### Sense:", tesseling.sensors
 
 print "Initial position"
 print "Distances to active center:",tesseling.distToActiveCenter()
-print tesseling.distToCenters()
+print tesseling.computeDistToCenters()
 print "update active center :"
 tesseling.updateActiveCenter()
 print "Distances:",tesseling.distToActiveCenter()
-print tesseling.distToCenters()
+print tesseling.computeDistToCenters()
 
 print "##### Move ---------"
 tesseling.moveTo(75, 33)
 print "New position", tesseling.position
 print "Active center", tesseling.activeCenter
 print "Distances to active center:",tesseling.distToActiveCenter()
-print tesseling.distToCenters()
+print tesseling.computeDistToCenters()
 print "update active center :"
 tesseling.updateActiveCenter()
 print "Active center", tesseling.activeCenter
@@ -83,7 +87,7 @@ tesseling.moveTo(45, 35)
 print "New position", tesseling.position
 print "Active center", tesseling.activeCenter
 print "Distances to active center:",tesseling.distToActiveCenter()
-print tesseling.distToCenters()
+print tesseling.computeDistToCenters()
 print "update active center :"
 tesseling.updateActiveCenter()
 print "Active center", tesseling.activeCenter
@@ -92,6 +96,9 @@ tesseling.senseLasers(mapEnv)
 print "##### Sense:", tesseling.sensors
 
 plt.ion()
+xd=(zip(*tesseling.centerList))[0]
+yd=(zip(*tesseling.centerList))[1]
+cl, = plt.plot(yd, xd, 'o', color='r', ms=10)
 mapplot=plt.imshow(mapEnv, interpolation='none')
 mapplot.set_cmap('Greys')
 plt.xlabel("y")
@@ -101,20 +108,26 @@ plt.ylim([0.0, 100.0])
 plt.colorbar()
 plt.show()
 print "##### Drive --------"
-for ts in np.arange(100):
+previousLen = len(tesseling.centerList)
+for ts in np.arange(2000):
 	tesseling.forwardDrive(mapEnv)
-	print "New position", tesseling.position
+	#print "New position", tesseling.position
 #--------------------------------------------------------
 # Display centers, frontiers, maps :
 	#print "Display -------------------"
-	xd=(zip(*tesseling.centerList))[0]
-	yd=(zip(*tesseling.centerList))[1]
+	if len(tesseling.centerList) > previousLen:
+		xd=(zip(*tesseling.centerList))[0]
+		yd=(zip(*tesseling.centerList))[1]
+		cl.remove()
+		#print "coordinates:", xd, yd, xa, ya
+		cl, = plt.plot(yd, xd, 'o', color='r', ms=10)
+	
 	xa=tesseling.position[0]
 	ya=tesseling.position[1]
-
-	#print "coordinates:", xd, yd, xa, ya
-	plt.plot(yd, xd, 'o', color='r', ms=10)
-	plt.plot(ya, xa, 's', color='b')
+	ln, = plt.plot(ya, xa, 's', color='b')
 	#plt.show()
 	plt.draw()
-	time.sleep(0.05)
+	time.sleep(0.01)
+	ln.remove()
+
+plt.waitforbuttonpress()

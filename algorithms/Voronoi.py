@@ -8,10 +8,12 @@ maxLaserRange = 20
 
 class Voronoi:
 	def __init__(self):
-		self.position=(80, 25)
+		self.position=(50, 50)
 		self.centerList=[self.position]
 		self.activeCenter=0
 		self.edgeList=[]
+		self.speed =(0,0)
+		self.centerWidth = 10.0
 		self.laserMeasurement=np.zeros(nbLaserDir).tolist()
 		print "Ctor"
 
@@ -58,10 +60,9 @@ class Voronoi:
 		#print downSensing, downDist 
 
 	def distToActiveCenter(self):
-		#print self.position, self.centerList[self.activeCenter]
 		return math.sqrt(math.pow(self.position[0]-self.centerList[self.activeCenter][0],2)+math.pow(self.position[1]-self.centerList[self.activeCenter][1],2))
 
-	def distToCenters(self):
+	def computeDistToCenters(self):
 		self.distCenters=[math.sqrt(math.pow(cp[0]-self.position[0],2)+math.pow(cp[1]-self.position[1],2)) for cp in self.centerList]
 		return self.distCenters
 
@@ -73,11 +74,31 @@ class Voronoi:
 	
 	def forwardDrive(self, envMap):
 		self.senseLasers(envMap)
-		print self.sensors
-		randvalue=np.random.rand()
-		print randvalue
-		posX=self.position[0] + math.floor(7*(randvalue-0.5))
-		posX = posX if envMap[posX, self.position[1]] != 1 else self.position[0]
-		posY=self.position[1] + math.floor(7*((1-randvalue)-0.5))
-		posY = posY if envMap[self.position[0], posY] != 1 else self.position[1]
+		#print type(envMap)
+		randvalues=(np.random.rand(), np.random.rand())
+		speedVar = 10
+		self.speed = (math.floor(0.5*self.speed[0])+math.floor(speedVar*(randvalues[0]-0.4)), math.floor(0.5*self.speed[1])+math.floor(speedVar*((randvalues[1])-0.4)))
+		posX=self.position[0] + self.speed[0]
+		if ((posX < envMap.shape[0]) and (posX > 0)):
+			posX = posX if (envMap[posX, self.position[1]] != 1) else self.position[0]
+		else:
+			posX=self.position[0]
+		posY=self.position[1] + self.speed[1]
+		if ((posY < envMap.shape[1]) and (posY > 0)):
+			posY = posY if (envMap[self.position[0], posY] != 1) else self.position[1]
+		else:
+			posY=self.position[1]
+
 		self.moveTo(posX, posY)
+		# update center list and distances :
+		#print "Distances to active center:",self.distToActiveCenter()
+		self.computeDistToCenters()
+		self.updateActiveCenter()
+		print "Active center", self.activeCenter, self.distToActiveCenter()
+		if self.distToActiveCenter() > self.centerWidth:
+			self.centerList.append(self.position)
+			self.computeDistToCenters()
+			self.updateActiveCenter()
+
+
+
