@@ -19,7 +19,13 @@ rawdata.close()
 
 print type(text)
 playTimes=re.findall('(real )([0-9]{1,5}\.[0-9]{0,2})', text)
+# Extract date :
+playDates=re.findall('(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s([1-3]{,1}[0-9])\s(janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre)\s([0-9]{4}),\s([0-9]{1,2}:[0-9]{2}:[0-9]{2})\s', text)
 
+# reverse tuple :
+#playDates[0] = playDates[0][::-1]
+print playDates
+print len(playDates), len(playTimes)
 tmp=zip(*playTimes)
 timesPlayed=tmp[1]
 
