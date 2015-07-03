@@ -2,18 +2,43 @@
 
 # This is server.py file
 # from  http://www.tutorialspoint.com/python/python_networking.htm
+# and mostly from http://www.binarytides.com/code-chat-application-server-client-sockets-python/
+# and http://www.binarytides.com/python-socket-programming-tutorial/
 
 import socket               # Import socket module
+import sys
+from thread import *
 import numpy as np
-
-s = socket.socket()         # Create a socket object
+from serverFunctions import *
+# ====================================================================================
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         # Create a socket object
 host = socket.gethostname() # Get local machine name
-port = 12345                # Reserve a port for your service.
-s.bind((host, port))        # Bind to the port
+port = 12346                # Reserve a port for your service.
 
-s.listen(5)                 # Now wait for client connection.
+# Trying to bind the socket :
+try:
+	s.bind((host, port))        # Bind to the port
+except socket.error , msg:
+	print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+	sys.exit()
+# ====================================================================================
+
+# Now wait for client connection. We should investigate the argument value
+s.listen(10)
+
+print "Socket listening ... ", host
+
+nbOfConnections=0;
+
 while True:
 	c, addr = s.accept()     # Establish connection with client.
-	print 'Got connection from', addr
-	c.send('Thank you for connecting '+str(np.random.rand()))
-	c.close()                # Close the connection
+	nbOfConnections += 1;
+	print 'Got connection from', addr, ' (', nbOfConnections,' people connected)'
+	#start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
+	start_new_thread(clientThread ,(c,))
+	#c.send('Thank you for connecting '+str(np.random.rand()))
+	#c.close()                # Close the connection
+
+print "Server closing ..."
+s.close()
+
