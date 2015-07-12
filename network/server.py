@@ -10,10 +10,21 @@ import sys
 from thread import *
 import numpy as np
 from serverFunctions import *
+from optparse import OptionParser
+
 # ====================================================================================
+# Processing arguments :
+#default port :
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         # Create a socket object
 host = socket.gethostname() # Get local machine name
-port = 12345                # Reserve a port for your service.
+port = 12345 
+
+parser = OptionParser()
+parser.add_option("-p", "--port", action="store", type="string", dest="port")
+(options, args) = parser.parse_args()
+print options, args, options.port
+port = int(options.port)
+# ====================================================================================
 
 # Trying to bind the socket :
 try:
@@ -31,19 +42,25 @@ print "Socket listening ... ", host
 nbOfConnections=0;
 
 productList=["banana", "apple", "grape", "apricot", "mutton"]
+productStocks=[100, 90, 50, 70, 30]
 basePrice = 3.5
 priceList= np.trunc(100*(basePrice+np.random.randn(len(productList))))/100.0
 #priceList= 2.0+np.around(np.random.randn(len(productList)), decimals=2)
 priceList = priceList.tolist()
 
-print productList, priceList
+print productList
+print priceList
+print productStocks
+productData=zip(*[productList, productStocks, priceList])
+print productData
+#productData=[{'name':}]
 
 while True:
 	c, addr = s.accept()     # Establish connection with client.
 	nbOfConnections += 1;
-	print 'Got connection from', addr, ' (', nbOfConnections,' people connected)'
+	#print 'Got connection from', addr, ' (', nbOfConnections,' people connected)'
 	#start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-	start_new_thread(clientThread ,(c, productList, priceList))
+	start_new_thread(clientThread ,(c, productData))
 	#c.send('Thank you for connecting '+str(np.random.rand()))
 	#c.close()                # Close the connection
 
