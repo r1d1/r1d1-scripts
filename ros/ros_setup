@@ -31,11 +31,12 @@ alias usepr2="export ROS_MASTER_URI=http://$ROBOTADDRESS:11311 ; export ROBOT=pr
 #PS1=\"$PS1\e[0;31m-PR2\e[m\$ \""
 alias usesim="export ROS_MASTER_URI=http://localhost:11311 ; export ROBOT=sim ;"
 #PS1=\"$PS1\e[0;31m-SIM\e[m\$ \""
-alias roscomp='sup sup catkin_make ; roscd '
+alias roscomp='cd ; cd catkin_ws ; catkin_make ; roscd '
 
 useddistro=""
 
 export ROS_IP=134.157.18.211
+export ROS_WORKSPACE=/home/renaudo/catkin_ws
 
 # setup functions :
 function usedistro
@@ -44,6 +45,8 @@ function usedistro
 	unset ROS_PACKAGE_PATH
 	unset ROS_ETC_DIR
 	unset ROS_ROOT
+	
+	env | grep ROS
 
 	local e
 	thegoodone=true
