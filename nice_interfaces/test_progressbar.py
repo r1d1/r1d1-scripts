@@ -34,6 +34,8 @@ print("Using tqdm")
 from tqdm import tqdm
 count=0
 for i in tqdm(progress_range):
+    #print(type(i))
+    #print(type(tqdm(progress_range)))
     time.sleep(durations[count])
     count += 1
 
