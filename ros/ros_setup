@@ -46,6 +46,8 @@ function usedistro
 	unset ROS_PACKAGE_PATH
 	unset ROS_ETC_DIR
 	unset ROS_ROOT
+	
+	env | grep ROS
 
 	local e
 	thegoodone=true

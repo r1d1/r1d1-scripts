@@ -41,14 +41,14 @@ class Voronoi:
 		downMinY=self.position[1]-1-maxLaserRange if (self.position[1]-1-maxLaserRange) >= 0 else 0
 		downMaxY=self.position[1]-1 if (self.position[1]-1) >= 0 else 0
 		
-		leftSensing= envmap[leftMinX:leftMaxX, self.position[1]]
+		leftSensing= envmap[int(leftMinX):int(leftMaxX), int(self.position[1])]
 		leftSensing=leftSensing[::-1]
 		self.leftDist=next((i for i, x in enumerate(leftSensing) if x), np.inf)
-		rightSensing=envmap[rightMinX:rightMaxX, self.position[1]]
+		rightSensing=envmap[int(rightMinX):int(rightMaxX), int(self.position[1])]
 		self.rightDist=next((i for i, x in enumerate(rightSensing) if x), np.inf)
-		topSensing=envmap[self.position[0], topMinY:topMaxY]
+		topSensing=envmap[int(self.position[0]), int(topMinY):int(topMaxY)]
 		self.topDist=next((i for i, x in enumerate(topSensing) if x), np.inf)
-		downSensing=envmap[self.position[0], downMinY:downMaxY] 
+		downSensing=envmap[int(self.position[0]), int(downMinY):int(downMaxY)] 
 		downSensing=downSensing[::-1]
 		self.downDist=next((i for i, x in enumerate(downSensing) if x), np.inf)
 		self.sensors=[self.leftDist, self.rightDist, self.topDist, self.downDist]
@@ -78,12 +78,12 @@ class Voronoi:
 		self.speed = (math.floor(0.5*self.speed[0])+math.floor(speedVar*(randvalues[0]-0.4)), math.floor(0.5*self.speed[1])+math.floor(speedVar*((randvalues[1])-0.4)))
 		posX=self.position[0] + self.speed[0]
 		if ((posX < envMap.shape[0]) and (posX > 0)):
-			posX = posX if (envMap[posX, self.position[1]] != 1) else self.position[0]
+			posX = posX if (envMap[int(posX), int(self.position[1])] != 1) else self.position[0]
 		else:
 			posX=self.position[0]
 		posY=self.position[1] + self.speed[1]
 		if ((posY < envMap.shape[1]) and (posY > 0)):
-			posY = posY if (envMap[self.position[0], posY] != 1) else self.position[1]
+			posY = posY if (envMap[int(self.position[0]), int(posY)] != 1) else self.position[1]
 		else:
 			posY=self.position[1]
 

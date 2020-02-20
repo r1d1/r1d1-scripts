@@ -25,7 +25,7 @@ parser.add_option("-p", "--port", action="store", type="string", dest="port")
 print options, args, options.port
 port = int(options.port)
 # ====================================================================================
-
+print "Trying to start server on", host, ":", port
 # Trying to bind the socket :
 try:
 	s.bind((host, port))        # Bind to the port

@@ -1,2 +1,4 @@
 misc/*.txt
-algorithms/*.pyc
+*.pyc
+*.swp
+*.*~
