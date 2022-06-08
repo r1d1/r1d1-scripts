@@ -1,0 +1,12 @@
+<!doctype html>
+<title>Form test</title>
+{% if guitype %}
+  <h1>Hello {{ guitype }}!</h1>
+{% else %}
+  <h1>Hello, World!</h1>
+{% endif %}
+<form>
+<input type="button" onclick="alert('yoyoyo')" name="action_play" value="Play">
+<input type="button" onclick="alert('yoyoyo')" name="action_discard" value="Discard">
+<input type="button" onclick="alert('yoyoyo')" name="action_pass" value="Pass">
+</form>
