@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from flask import Flask
-from flask import url_for
+from flask import url_for, redirect
 from flask import render_template
 from flask import request
 
@@ -23,9 +23,34 @@ def hello_name(name):
     return f"Hello, {escape(name)}!"
 '''
 
-@app.route("/game")
-def interface(gui=None):
-    return render_template('interface.html', guitype=gui)
+@app.route("/game", methods=['POST', 'GET'])
+def interface(gui=None, action=None):
+    print(request.method)
+    act = 1
+    if request.method == 'POST':
+        act = request.form['action_btn']
+        print(request.form['action_btn'])
+        print(request.form.getlist('choice'))
+        #print(request.form['action_play'])
+        #print(request.form['action_discard'])
+        #print(request.form['action_pass'])
+    elif request.method == 'GET':
+        act = request.args.get('action_btn')
+        print(request.args.get('action_btn'))
+        #if request.args.get('action_play'):
+        #    act = 1
+        #elif request.args.get('action_discard'):
+        #    act = 2
+        #print(request.args.get('action_play'))
+        #print(request.args.get('action_discard'))
+        #print(request.args.get('action_pass'))
+        
+    #return redirect(url_for('success', action=act))
+    return render_template('interface.html', guitype=gui, action=act)
+
+@app.route("/success/<action>")
+def success(action='none'):
+    return "action %s" % action
 
 @app.route("/about")
 

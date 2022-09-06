@@ -5,8 +5,24 @@
 {% else %}
   <h1>Hello, World!</h1>
 {% endif %}
-<form>
-<input type="button" onclick="alert('yoyoyo')" name="action_play" value="Play">
+<!--form action="./game" method="post"-->
+<!--form action="./game" method="get"-->
+<form action="./game" method="post">
+<input type="checkbox" name="choice" value="1">
+<input type="checkbox" name="choice" value="2">
+<input type="checkbox" name="choice" value="3">
+<input type="checkbox" name="choice" value="4">
+<input type="checkbox" name="choice" value="5">
+<br />
+<input type="submit" name="action_btn" value="Play">
+<input type="submit" name="action_btn" value="Discard">
+<input type="submit" name="action_btn" value="Pass">
+<!--input type="button" name="action_play" value="Play">
+<input type="button" name="action_discard" value="Discard">
+<input type="button" name="action_pass" value="Pass"-->
+<!--input type="button" onclick="alert('yoyoyo')" name="action_play" value="Play">
 <input type="button" onclick="alert('yoyoyo')" name="action_discard" value="Discard">
-<input type="button" onclick="alert('yoyoyo')" name="action_pass" value="Pass">
+<input type="button" onclick="alert('yoyoyo')" name="action_pass" value="Pass"-->
 </form>
+
+<h1>Action {{ action }}!</h1>
