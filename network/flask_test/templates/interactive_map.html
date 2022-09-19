@@ -1,0 +1,30 @@
+<!doctype html>
+    <head>
+        <title>Interactive Map</title>
+    </head>
+
+
+        <form action="./interactive_map" method="post">
+            <input type="checkbox" name="choice" value="1">
+            <input type="checkbox" name="choice" value="2">
+            <input type="checkbox" name="choice" value="3">
+            <input type="checkbox" name="choice" value="4">
+            <input type="checkbox" name="choice" value="5">
+            <br />
+            <input type="submit" name="action_btn" value="Play">
+            <input type="submit" name="action_btn" value="Discard">
+            <input type="submit" name="action_btn" value="Pass">
+        </form>
+
+        {% if action and counter %}
+            <h1>Action #{{ counter }}: {{ action }}!</h1>
+        {% else %}
+            <h1>Hello, World!</h1>
+        {% endif %}
+        
+        <canvas id="map_hex_canvas" width="160" height="120" style="border:1px solid #000000;">
+        <!--/canvas--> 
+        <script type="text/javascript" src="{{ url_for('static', filename='hex_drawer.js') }}">
+        </script>
+        
+        
