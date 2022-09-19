@@ -7,6 +7,9 @@ from flask import request
 
 from markupsafe import escape
 
+# General script variables
+count = 0
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -47,6 +50,16 @@ def interface(gui=None, action=None):
         
     #return redirect(url_for('success', action=act))
     return render_template('interface.html', guitype=gui, action=act)
+
+@app.route("/interactive_map", methods=['POST', 'GET'])
+def interactive_map(action=None, counter=0):
+    global count
+    act=None
+    count += 1
+    if request.method == 'POST':
+        act = request.form['action_btn']
+        print(request.form.getlist('choice'))
+    return render_template('interactive_map.html', action=act, counter=count)
 
 @app.route("/success/<action>")
 def success(action='none'):
