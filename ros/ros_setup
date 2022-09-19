@@ -35,9 +35,9 @@ alias roscomp='cd ; cd catkin_ws ; catkin_make ; roscd'
 
 useddistro=""
 
-export ROS_IP=$(ifconfig eth0 | head -2 | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)
-echo "ROS_IP set to :"
-echo $ROS_IP
+#export ROS_IP=$(ifconfig eth0 | head -2 | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)
+#echo "ROS_IP set to :"
+#echo $ROS_IP
 
 # setup functions :
 function usedistro

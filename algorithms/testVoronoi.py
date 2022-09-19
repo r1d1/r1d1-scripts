@@ -101,7 +101,7 @@ plt.xlabel("y")
 plt.ylabel("x")
 plt.xlim([0.0, 100.0])
 plt.ylim([0.0, 100.0])
-plt.colorbar()
+#plt.colorbar()
 plt.show()
 
 print "##### Drive --------"
